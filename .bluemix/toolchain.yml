@@ -51,7 +51,15 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-  pipeline-definition:
+  gitops-inventory:
+    service_id: >
+      $env.source_provider ? $env.source_provider : 'hostedgit'
+    parameters:
+      repo_name: 'gitops-gitops-inventory-{{timestamp}}'      
+      type: 'new'
+      has_issues: false
+      enable_traceability: false
+  ci-pipeline-definition:
     service_id: 'githubconsolidated'
     parameters:
       source_repo_url: $env.repository
@@ -80,7 +88,7 @@ services:
         content:
           $text: "pr_pipeline_tool.yml"
         env:
-          PIPELINE_REPO: pipeline-definition
+          PIPELINE_REPO: ci-pipeline-definition
           APP_REPO: repo
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -139,7 +147,7 @@ services:
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             }
-          PIPELINE_REPO: pipeline-definition
+          PIPELINE_REPO: ci-pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: task-catalog
@@ -155,12 +163,14 @@ services:
             } else {
               'grit-or-gitlab-commit';
             }
+          INVENTORY_REPO: gitops-inventory
+          INVENTORY_REPO_BRANCH: master
         execute: 'manual-run'
   cd-pipeline:
     service_id: pipeline
     parameters:
       services:
-        - repo
+        - gitops-inventory
       name: 'cd-pipeline'
       ui-pipeline: true
       type: 'tekton'
@@ -168,8 +178,8 @@ services:
         content:
           $text: "cd_pipeline_tool.yml"
         env:
-          APP_REPO: repo
-          APP_NAME: "{{form.pipeline.parameters.app-name}}"
+          INVENTORY_REPO: gitops-inventory
+          INVENTORY_REPO_BRANCH: staging
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           API_KEY: "{{form.pipeline.parameters.api-key}}"
@@ -191,7 +201,7 @@ services:
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             }
-          PIPELINE_REPO: pipeline-definition
+          PIPELINE_REPO: ci-pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: task-catalog
