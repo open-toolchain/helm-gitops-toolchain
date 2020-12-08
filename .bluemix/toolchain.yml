@@ -56,7 +56,7 @@ services:
     parameters:
       repo_url: >
         $env.repository
-      type: "link"
+      type: "fork"
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
@@ -68,7 +68,7 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
-  pr:
+  pr-pipeline:
     service_id: 'pipeline'
     parameters:
       services:
@@ -79,7 +79,7 @@ services:
       ui-pipeline: true
       configuration:
         content:
-          $text: "pr_pipeline_tekton.yml"
+          $text: "pr_pipeline_tool.yml"
         env:
           PIPELINE_REPO: pipeline-repo
           APP_REPO: repo
@@ -105,7 +105,7 @@ services:
               'gitlab-pr-listener';
             }
         execute: false
-  build:
+  ci-pipeline:
     service_id: pipeline
     parameters:
       services:
@@ -115,7 +115,7 @@ services:
       type: 'tekton'
       configuration:
         content:
-          $text: "ci_pipeline_tekton.yml"
+          $text: "ci_pipeline_tool.yml"
         env:
           APP_REPO: repo
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -157,7 +157,7 @@ services:
               'grit-or-gitlab-commit';
             }
         execute: 'manual-run'
-  deploy:
+  cd-pipeline:
     service_id: pipeline
     parameters:
       services:
@@ -167,7 +167,7 @@ services:
       type: 'tekton'
       configuration:
         content:
-          $text: "cd_pipeline_tekton.yml"
+          $text: "cd_pipeline_tool.yml"
         env:
           APP_REPO: repo
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
