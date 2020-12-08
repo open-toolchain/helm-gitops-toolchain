@@ -221,13 +221,13 @@ form:
         $env.appName ?
           '{{appName}}' : '{{services.repo.parameters.repo_name}}'
       dev-cluster-namespace: >
-        $env.prodClusterNamespace ?
-          '{{prodClusterNamespace}}' : 'prod'
+        $env.devClusterNamespace ?
+          '{{devClusterNamespace}}' : 'dev'
       registry-region: '{{registryRegion}}'
       registry-namespace: '{{registryNamespace}}'
       api-key: '{{apiKey}}'
-      dev-region: '{{prodRegion}}'
-      dev-resource-group: '{{prodResourceGroup}}'
-      dev-cluster-name: '{{prodClusterName}}'
+      dev-region: '{{devRegion}}'
+      dev-resource-group: '{{devResourceGroup}}'
+      dev-cluster-name: '{{devClusterName}}'
     schema:
       $ref: deploy.json
