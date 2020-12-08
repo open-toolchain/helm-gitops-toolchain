@@ -59,7 +59,7 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
-  tekton-tasks-catalog:
+  task-catalog:
     service_id: 'githubconsolidated'
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
@@ -72,7 +72,7 @@ services:
     parameters:
       services:
         - repo
-        - tekton-tasks-catalog
+        - task-catalog
       name: 'pr-pipeline'
       type: 'tekton'
       ui-pipeline: true
@@ -88,7 +88,7 @@ services:
           PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-tasks-catalog
+          TEKTON_CATALOG_REPO: task-catalog
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
@@ -142,7 +142,7 @@ services:
           PIPELINE_REPO: pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-tasks-catalog
+          TEKTON_CATALOG_REPO: task-catalog
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
               'github-commit';
@@ -194,7 +194,7 @@ services:
           PIPELINE_REPO: pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-tasks-catalog
+          TEKTON_CATALOG_REPO: task-catalog
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
               'github-commit';
