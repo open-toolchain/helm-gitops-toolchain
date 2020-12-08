@@ -51,7 +51,7 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-  pipeline-repo:
+  pipeline-definition:
     service_id: 'githubconsolidated'
     parameters:
       source_repo_url: $env.repository
@@ -59,7 +59,7 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
-  tekton-catalog-repo:
+  tekton-tasks-catalog:
     service_id: 'githubconsolidated'
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
@@ -72,7 +72,7 @@ services:
     parameters:
       services:
         - repo
-        - tekton-catalog-repo
+        - tekton-tasks-catalog
       name: 'pr-pipeline'
       type: 'tekton'
       ui-pipeline: true
@@ -80,7 +80,7 @@ services:
         content:
           $text: "pr_pipeline_tool.yml"
         env:
-          PIPELINE_REPO: pipeline-repo
+          PIPELINE_REPO: pipeline-definition
           APP_REPO: repo
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -88,7 +88,7 @@ services:
           PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          TEKTON_CATALOG_REPO: tekton-tasks-catalog
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
@@ -139,10 +139,10 @@ services:
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             }
-          PIPELINE_REPO: pipeline-repo
+          PIPELINE_REPO: pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          TEKTON_CATALOG_REPO: tekton-tasks-catalog
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
               'github-commit';
@@ -191,10 +191,10 @@ services:
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             }
-          PIPELINE_REPO: pipeline-repo
+          PIPELINE_REPO: pipeline-definition
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
-          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          TEKTON_CATALOG_REPO: tekton-tasks-catalog
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
               'github-commit';
