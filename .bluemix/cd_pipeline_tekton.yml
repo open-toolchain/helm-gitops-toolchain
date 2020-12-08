@@ -71,14 +71,14 @@ properties:
     value: ${APP_NAME}
     type: text
   - name: dev-cluster-namespace
-    value: ${PROD_CLUSTER_NAMESPACE}
+    value: ${DEV_CLUSTER_NAMESPACE}
     type: text
   - name: dev-region
-    value: ${PROD_REGION_ID}
+    value: ${DEV_REGION_ID}
     type: text
   - name: cluster-name
-    value: ${PROD_CLUSTER_NAME}
+    value: ${DEV_CLUSTER_NAME}
     type: text
   - name: dev-resource-group
-    value: ${PROD_RESOURCE_GROUP}
+    value: ${DEV_RESOURCE_GROUP}
     type: text
