@@ -59,6 +59,8 @@ spec:
     - name: project-id
       description: project id
       default: ""
+    - name: inventory-repo
+      description: inventory repository owner and name
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim

@@ -56,6 +56,8 @@ spec:
     - name: scm-type
     - name: project-id
       default: ""
+    - name: inventory-repo
+      value: $(params.inventory-repo)
   workspaces:
     - name: pipeline-ws
   tasks:

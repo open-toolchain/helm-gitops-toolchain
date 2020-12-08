@@ -12,7 +12,7 @@ template:
   required:
     - repo
     - ci-pipeline
-    - gitops-inventory
+    - inventory-repo
   $configuration:
     ENABLE_EXTENSIONS: true
     ENABLE_IF_ELSE: true
@@ -52,11 +52,11 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-  gitops-inventory:
+  inventory-repo:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
-      repo_name: 'gitops-inventory-{{timestamp}}'      
+      repo_name: 'inventory-{{timestamp}}'      
       type: 'new'
       has_issues: false
       enable_traceability: false
@@ -118,6 +118,8 @@ services:
     parameters:
       services:
         - repo
+        - ci-pipeline-definition
+        - task-catalog
       name: 'ci-pipeline'
       ui-pipeline: true
       type: 'tekton'
@@ -164,14 +166,16 @@ services:
             } else {
               'grit-or-gitlab-commit';
             }
-          INVENTORY_REPO: gitops-inventory
+          INVENTORY_REPO: inventory-repo
           INVENTORY_REPO_BRANCH: master
         execute: 'manual-run'
   cd-pipeline:
     service_id: pipeline
     parameters:
       services:
-        - gitops-inventory
+        - inventory-repo
+        - cd-pipeline-definition
+        - task-catalog
       name: 'cd-pipeline'
       ui-pipeline: true
       type: 'tekton'
@@ -179,7 +183,7 @@ services:
         content:
           $text: "cd_pipeline_tool.yml"
         env:
-          INVENTORY_REPO: gitops-inventory
+          INVENTORY_REPO: inventory-repo
           INVENTORY_REPO_BRANCH: staging
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
