@@ -10,7 +10,7 @@ template:
   header: "![](toolchain.svg?localize)"
   icon: secure-lock-helm.svg
   required:
-    - build
+    - ci-pipeline
     - repo
   $configuration:
     ENABLE_EXTENSIONS: true
