@@ -10,8 +10,9 @@ template:
   header: "![](toolchain.svg?localize)"
   icon: secure-lock-helm.svg
   required:
-    - ci-pipeline
     - repo
+    - ci-pipeline
+    - gitops-inventory
   $configuration:
     ENABLE_EXTENSIONS: true
     ENABLE_IF_ELSE: true
@@ -55,7 +56,7 @@ services:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
-      repo_name: 'gitops-gitops-inventory-{{timestamp}}'      
+      repo_name: 'gitops-inventory-{{timestamp}}'      
       type: 'new'
       has_issues: false
       enable_traceability: false
